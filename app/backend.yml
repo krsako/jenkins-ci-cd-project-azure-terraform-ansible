@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quiz-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quiz-server
+  template:
+    metadata:
+      labels:
+        app: quiz-server
+    spec:
+      containers:
+      - name: quiz-server
+        image: kristosako/spring-quiz:121
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - name: http
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quiz-server
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: quiz-server
